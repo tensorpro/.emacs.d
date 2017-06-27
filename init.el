@@ -14,7 +14,15 @@
 (setq initial-scratch-message nil)
 (setq default-cursor-type 'bar)
 
+(setq python-shell-interpreter "ipython" python-shell-interpreter-args "--simple-prompt -i")
+;; Path fix
+(defun set-exec-path-from-shell-PATH ()
+        (interactive)
+        (let ((path-from-shell (replace-regexp-in-string "^.*\n.*shell\n" "" (shell-command-to-string "$SHELL --login -i -c 'echo $PATH'"))))
+        (setenv "PATH" path-from-shell)
+        (setq exec-path (split-string path-from-shell path-separator))))
 
+(set-exec-path-from-shell-PATH)
 
 
 ;;; Package initialization
@@ -153,7 +161,9 @@
   :diminish ivy-mode
   :config
   (ivy-mode 1)
-  (setq ivy-use-virtual-buffers)
+  (setq ivy-use-virtual-buffers t)
+  (setq enable-recursive-minibuffers t)
+ 
   :bind
   (("C-s" . swiper)
    ("C-c C-r" . ivy-resume)
@@ -274,6 +284,48 @@
   )
 
 
+(require 'conda)
+;; if you want interactive shell support, include:
+(conda-env-initialize-interactive-shells)
+;; if you want eshell support, include:
+(conda-env-initialize-eshell)
+;; if you want auto-activation (see below for details), include:
+(conda-env-autoactivate-mode t)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(conda-anaconda-home "/home/akshay/.conda/")
+ '(fci-rule-color "#5E5E5E")
+ '(haskell-process-auto-import-loaded-modules t)
+ '(haskell-process-log t)
+ '(haskell-process-suggest-remove-import-lines t)
+ '(package-selected-packages
+   (quote
+    (python-cell conda xcscope virtualenvwrapper use-package undo-tree spacemacs-theme spaceline smartparens rainbow-delimiters python-mode pyenv-mode projectile popwin nlinum multiple-cursors magit hi2 hc-zenburn-theme google-c-style flycheck-haskell exec-path-from-shell evil-nerd-commenter counsel company-ghc company-anaconda better-defaults bash-completion ace-jump-mode)))
+ '(vc-annotate-background "#202020")
+ '(vc-annotate-color-map
+   (quote
+    ((20 . "#C99090")
+     (40 . "#D9A0A0")
+     (60 . "#ECBC9C")
+     (80 . "#DDCC9C")
+     (100 . "#EDDCAC")
+     (120 . "#FDECBC")
+     (140 . "#6C8C6C")
+     (160 . "#8CAC8C")
+     (180 . "#9CBF9C")
+     (200 . "#ACD2AC")
+     (220 . "#BCE5BC")
+     (240 . "#CCF8CC")
+     (260 . "#A0EDF0")
+     (280 . "#79ADB0")
+     (300 . "#89C5C8")
+     (320 . "#99DDE0")
+     (340 . "#9CC7FB")
+     (360 . "#E090C7"))))
+ '(vc-annotate-very-old-color "#E090C7"))
 ;;;; Custom functions
 
 (setq primary-modes
@@ -377,20 +429,11 @@
 (defun configure/nix-global ()
   (interactive)
   (find-file "/etc/nixos/configuration.nix"))
-(setq-default py-shell-name "ipython")
 
 (defun notes/to-learn ()
   (interactive)
   (find-file "~/to-learn.org"))
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-    (xcscope virtualenvwrapper use-package undo-tree spacemacs-theme spaceline smartparens rainbow-delimiters python-mode pyenv-mode projectile popwin nlinum multiple-cursors magit hi2 hc-zenburn-theme google-c-style flycheck-haskell exec-path-from-shell evil-nerd-commenter counsel company-ghc company-anaconda better-defaults bash-completion ace-jump-mode)))
- '(python-shell-interpreter "jupyter_console"))
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
