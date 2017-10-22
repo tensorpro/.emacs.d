@@ -219,6 +219,8 @@
   (org-babel-do-load-languages
     'org-babel-load-languages
     '((python . t)))
+  :bind
+  ("C-x p" . org-latex-export-to-pdf)
   )
 
 (use-package haskell-mode
@@ -237,11 +239,11 @@
 
 (use-package c-mode
   :config
-  (setq-default c-basic-offset 4
-              tab-width 4
+  (setq-default c-basic-offset 8
+              tab-width 8
               indent-tabs-mode t)
   (setq c-default-style "linux"
-		c-basic-offset 4)
+		c-basic-offset 8)
   (add-hook 'c-mode-common-hook '(lambda () (c-toggle-auto-state 1)))
   (add-hook 'c++-mode-hook (lambda () (setq flycheck-clang-language-standard "c++11")))
   :bind
@@ -297,13 +299,16 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(conda-anaconda-home "/home/akshay/.conda/")
+ '(custom-safe-themes
+   (quote
+    ("bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default)))
  '(fci-rule-color "#5E5E5E")
  '(haskell-process-auto-import-loaded-modules t)
  '(haskell-process-log t)
  '(haskell-process-suggest-remove-import-lines t)
  '(package-selected-packages
    (quote
-    (python-cell conda xcscope virtualenvwrapper use-package undo-tree spacemacs-theme spaceline smartparens rainbow-delimiters python-mode pyenv-mode projectile popwin nlinum multiple-cursors magit hi2 hc-zenburn-theme google-c-style flycheck-haskell exec-path-from-shell evil-nerd-commenter counsel company-ghc company-anaconda better-defaults bash-completion ace-jump-mode)))
+    (ag csharp-mode evil ess python-cell conda xcscope virtualenvwrapper use-package undo-tree spacemacs-theme spaceline smartparens rainbow-delimiters python-mode pyenv-mode projectile popwin nlinum multiple-cursors magit hi2 hc-zenburn-theme google-c-style flycheck-haskell exec-path-from-shell evil-nerd-commenter counsel company-ghc company-anaconda better-defaults bash-completion ace-jump-mode)))
  '(vc-annotate-background "#202020")
  '(vc-annotate-color-map
    (quote
@@ -434,9 +439,17 @@
   (interactive)
   (find-file "~/to-learn.org"))
 
+(setq org-latex-listings 'minted
+      org-latex-packages-alist '(("" "minted"))
+      org-latex-pdf-process
+      '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+        "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+(add-hook 'doc-view-mode-hook 'auto-revert-mode)
+
