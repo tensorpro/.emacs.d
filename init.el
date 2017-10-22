@@ -13,7 +13,8 @@
 (setq inhibit-startup-message t) 
 (setq initial-scratch-message nil)
 (setq default-cursor-type 'bar)
-
+(menu-bar-mode -1)
+(tool-bar-mode -1)
 (setq python-shell-interpreter "ipython" python-shell-interpreter-args "--simple-prompt -i")
 ;; Path fix
 (defun set-exec-path-from-shell-PATH ()
